@@ -1,0 +1,14 @@
+server:
+  port: 8189
+  servlet:
+    context-path: /demo
+jwt:
+  secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
+  lifetime: 10m
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=todo_app
+    username: postgres
+    password: 1234
+
