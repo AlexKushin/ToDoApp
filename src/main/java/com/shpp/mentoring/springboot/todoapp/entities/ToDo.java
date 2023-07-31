@@ -26,6 +26,9 @@ public class ToDo {
     @Column(name = "date")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date date;
+    @Column(name = "expirationdate")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date expirationDate;
 
     @Column(name = "todo_state")
     @Enumerated(EnumType.STRING)

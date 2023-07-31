@@ -11,7 +11,6 @@ import com.shpp.mentoring.springboot.todoapp.repositiries.RoleRepository;
 import com.shpp.mentoring.springboot.todoapp.repositiries.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -122,7 +121,6 @@ public class UserService implements UserDetailsService {
         User user = UserConverter.convertDtoToEntity(userDTO);
         log.info("Try to put Person to repository, Person: first name = {}, last name = {}, ipn = {}",
                 user.getUsername(), user.getId(), user.getEmail());
-
 
         return (userRepository.findByUsername(username).isPresent()) ? new ResponseEntity<>(UserConverter
                 .convertEntityToDto(userRepository.save(user)), HttpStatus.OK)

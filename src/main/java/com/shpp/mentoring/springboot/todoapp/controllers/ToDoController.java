@@ -3,21 +3,25 @@ package com.shpp.mentoring.springboot.todoapp.controllers;
 import com.shpp.mentoring.springboot.todoapp.dtos.ToDoDTO;
 import com.shpp.mentoring.springboot.todoapp.service.ToDoService;
 import com.shpp.mentoring.springboot.todoapp.service.ToDoTransitionalService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
+
 public class ToDoController {
     private final ToDoTransitionalService toDoTransitionalService;
     private final ToDoService toDoService;
 
 
     @GetMapping("todos") //get list of user tasks
+    @Operation(summary = "Getting a list of tasks")
     public ResponseEntity<Iterable<ToDoDTO>> getUserTodos(Principal principal) {
         return new ResponseEntity<>(toDoService.getUserTodosDto(principal.getName()), HttpStatus.OK);
     }
@@ -29,11 +33,12 @@ public class ToDoController {
 
     @PutMapping("todos/{id}") // change task by id
     public ResponseEntity<ToDoDTO> changeTodoState(@PathVariable Long id, @RequestParam String transition) {
-        return new ResponseEntity<>(toDoTransitionalService.transition(id, transition), HttpStatus.CREATED);
+        return new ResponseEntity<>(toDoTransitionalService.transition(id, transition), HttpStatus.OK);
     }
 
     @PostMapping("todos") //create new task
-    public ResponseEntity<ToDoDTO> addNewTodo(@RequestBody ToDoDTO toDoDTO, Principal principal) {
+    public ResponseEntity<ToDoDTO> addNewTodo(@RequestBody @Valid ToDoDTO toDoDTO, Principal principal,
+                                              @RequestParam(required = false, defaultValue = "en") String local) {
         return new ResponseEntity<>(toDoService.addNewTodo(toDoDTO, principal.getName()), HttpStatus.CREATED);
     }
 
@@ -45,7 +50,6 @@ public class ToDoController {
 
     @GetMapping("admin/todos") //get list of user task
     public ResponseEntity<Iterable<ToDoDTO>> getUserTodoList() {
-        //return ResponseEntity.ok(toDoService.getAllToDo());
         return new ResponseEntity<>(toDoService.getAllToDo(), HttpStatus.OK);
     }
 
@@ -65,7 +69,8 @@ public class ToDoController {
 
 
     @PostMapping("admin/todos") //create new task
-    public ResponseEntity<ToDoDTO> addNewTodoByAdmin(@RequestBody ToDoDTO toDoDTO, @RequestParam String username) {
+    public ResponseEntity<ToDoDTO> addNewTodoByAdmin(@RequestBody @Valid ToDoDTO toDoDTO, @RequestParam String username,
+                                                     @RequestParam(required = false, defaultValue = "en") String local) {
         return new ResponseEntity<>(toDoService.addNewTodo(toDoDTO, username), HttpStatus.CREATED);
     }
 

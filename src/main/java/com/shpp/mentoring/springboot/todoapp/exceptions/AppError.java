@@ -8,11 +8,11 @@ import java.util.Date;
 public class AppError {
     private int status;
     private String message;
-    private Date timstamp;
+    private Date timeStamp;
 
     public AppError(int status, String message) {
         this.status = status;
         this.message = message;
-        this.timstamp = new Date();
+        this.timeStamp = new Date();
     }
 }

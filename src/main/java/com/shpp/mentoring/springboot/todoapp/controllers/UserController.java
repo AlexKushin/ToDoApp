@@ -9,30 +9,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
 
+
     private final UserService userService;
 
-    @GetMapping("/users/current") //get user info
+
+    @GetMapping("/users/current")
     public ResponseEntity<UserDTO> getUser(Principal principal){
         return new ResponseEntity<>(userService.getDtoByUsername(principal.getName()), HttpStatus.OK);
     }
 
-   /* @PutMapping("/users/current/{username}") //change user info
-    public ResponseEntity<UserDTO>putUser(@PathVariable String username, @RequestBody UserDTO userDTO){
+  @PutMapping("/users/current/{username}")
+    public ResponseEntity<UserDTO>putUser(@PathVariable String username, @RequestBody UserDTO userDTO
+          , @RequestParam(required = false, defaultValue = "en") String local){
         return userService.changeUserData(username, userDTO);
     }
 
-    */
 
+    @PostMapping("/registration")
+    public ResponseEntity<Object> addNewUser(@RequestBody @Valid RegistrationUserDto userDTO,
+                                              @RequestParam(required = false, defaultValue = "en") String local) {
 
-
-    @PostMapping("/registration") //add new user
-    public ResponseEntity<UserDTO> addNewUser(@RequestBody RegistrationUserDto userDTO){
         return new ResponseEntity<>(userService.createNewUser(userDTO), HttpStatus.CREATED);
     }
 
@@ -53,21 +56,19 @@ public class UserController {
     }
 
 
-    /*@PutMapping("admin/users/{username}") //change user info by admin
-    public ResponseEntity<UserDTO>putUserByAdmin(@PathVariable String username, @RequestBody UserDTO userDTO){
+    @PutMapping("admin/users/{username}")
+    public ResponseEntity<UserDTO>putUserByAdmin(@PathVariable String username,@RequestBody UserDTO userDTO,
+                                                 @RequestParam(required = false, defaultValue = "en") String local){
         return userService.changeUserData(username, userDTO);
     }
 
-     */
-
-
-    @DeleteMapping("admin/users/{username}") //delete user by admin
+    @DeleteMapping("admin/users/{username}")
     public ResponseEntity<UserDTO>deleteUserByUsername(@PathVariable String username){
         return new ResponseEntity<>(userService.deleteUser(username), HttpStatus.OK);
     }
     @GetMapping("admin/users/{username}/roles")
     public ResponseEntity<Iterable<Role>> getUserTodoRoles(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserRoles(username));
+        return new ResponseEntity<>(userService.getUserRoles(username), HttpStatus.OK);
 
     }
 }

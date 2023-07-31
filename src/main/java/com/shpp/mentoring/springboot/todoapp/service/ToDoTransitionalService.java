@@ -30,25 +30,13 @@ public class ToDoTransitionalService implements TransitionService<ToDoDTO>{
     private final ToDoRepository toDoRepository;
 
 
-    /**
-     * Returns a list of transitions allowed for a particular order identified by the id
-     *
-     * @param id: the id  of the order
-     * return: list of  transitions allowed
-     */
     @Override
     public List<String> getAllowedTransitions(Long id) {
         ToDo todo = toDoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown account: " + id));
         return todo.getTodoState().getTransitions();
     }
-    /**
-     * Transitions the order from the current state to the target state
-     *
-     * @param id:         the id of the account
-     * @param transition: the status to transition to
-     * return: the order details
-     */
+
     @Override
     public ToDoDTO transition(Long id, String transition) {
         Transition<ToDoDTO> accountTransition = transitionsMap.get(transition.toLowerCase());

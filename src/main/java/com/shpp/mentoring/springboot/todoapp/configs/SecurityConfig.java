@@ -1,7 +1,6 @@
 package com.shpp.mentoring.springboot.todoapp.configs;
 
 import com.shpp.mentoring.springboot.todoapp.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,6 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
-//новая модель конфигурирования через бины, не нужно экстендить WebSecurityConfigurerAdapter
-//@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
     private UserService userService;
@@ -34,8 +31,6 @@ public class SecurityConfig {
     public void setJwtRequestFilter(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
     }
-//следующие 3 метода (daoAuthenticationProvider, passwordEncoder, authenticationManager ) - это базовая настройка для того чтобы
-// у нас были пользователи, были роли, база данных использовалась в качестве источника, был пассвордэнкодер для работы с паролями
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
@@ -56,15 +51,13 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    //настраиваем правила безопасности
+    //setting security rules
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .cors().disable()
-                //устанавливаем какие запросы пропускать а какие не пропускать
                 .authorizeRequests()
-                // .antMatchers("/secured").authenticated()
                 .antMatchers("/users").authenticated()
                 .antMatchers("/todos").authenticated()
                 .antMatchers("/admin").hasRole("ADMIN")

@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS todo_app.todos
     id bigserial,
     description varchar,
     date DATE,
+    expirationDate DATE,
     todo_state varchar,
     primary key (id)
 );
